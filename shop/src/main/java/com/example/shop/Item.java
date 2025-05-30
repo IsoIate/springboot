@@ -14,6 +14,11 @@ public class Item {
     public Integer id;
     public String title;
     public Integer price;
+    public String userId;
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -24,8 +29,8 @@ public class Item {
 
     public void setPrice(Integer price) {
         this.price = price;
-    }
 
+    }
     public String getItems() {
         String temp = title + ", " + price;
         return temp;

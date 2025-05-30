@@ -24,7 +24,10 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="17afe6a9-6a49-4666-ab68-b4bba1af19a4">
-      <console name="Connection" type="STANDARD" schema="shop" session="Main"><![CDATA[select * from item;
+      <console name="Connection" type="STANDARD" schema="shop" session="Main"><![CDATA[--select * from item;
+select * from member;
+
+--delete from member where id ='2';
 --delete from item where id='4';
 --insert into notice values (1, '할인이벤트', '2030년 1월 2일')
 --insert into notice values (2, '입금자명 작성', '2030년 1월 3일')

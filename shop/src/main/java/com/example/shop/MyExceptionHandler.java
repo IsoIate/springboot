@@ -13,8 +13,8 @@ public class MyExceptionHandler {
         return ResponseEntity.status(400).body("매개변수 오류");
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handler() {
-        return ResponseEntity.status(400).body("exception 에러");
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<String> handler() {
+//        return ResponseEntity.status(400).body("exception 에러");
+//    }
 }

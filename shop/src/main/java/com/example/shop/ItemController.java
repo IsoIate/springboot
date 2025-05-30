@@ -2,6 +2,7 @@ package com.example.shop;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +33,16 @@ public class ItemController {
 
     @PostMapping("/add")
 //    String add(@ModelAttribute Item item) {
-    String add(@ModelAttribute Item item, @RequestParam Map<String, String> data) {
+    String add(@ModelAttribute Item item, @RequestParam Map<String, String> data, Authentication auth) {
 //        Item itemData = new Item();
 //        itemData.setTitle(data.get("title"));
 //        itemData.setPrice(data.get("price"));
 
+        System.out.println(auth.getName());
+
         // 서비스 클래스로 분리
-        boolean result = itemService.saveItem(item, data);
+//        boolean result = itemService.saveItem(item, data);
+        boolean result = false;
 
         if(!result)
         {

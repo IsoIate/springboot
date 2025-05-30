@@ -31,6 +31,10 @@
                 },
                 body : JSON.stringify({id : itemId})
             })
+                .then(res => res.text())
+                .then((a) => {
+                    console.log(a)
+                })
 
         }
 
