@@ -16,10 +16,16 @@ public class ItemService {
     public boolean saveItem(Item item, Map<String, String> data) {
         String title = data.get("title");
         Integer price = Integer.parseInt(data.get("price"));
+        String userId = data.get("userId") != null ? data.get("userId") : "guest";
+        String imageURL = data.get("imageURL");
+
+        System.out.println(data);
 
         if(title.length() <= 20 || price >= 0) {
             item.setTitle(title);
             item.setPrice(price);
+            item.setUserId(userId);
+            item.setFilename(imageURL);
             itemRepository.save(item);
 
             return true;
@@ -37,7 +43,6 @@ public class ItemService {
             item.setId(id);
             item.setTitle(title);
             item.setPrice(price);
-            System.out.println(item);
             itemRepository.save(item);
 
             return true;

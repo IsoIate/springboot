@@ -1,9 +1,6 @@
 package com.example.shop;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.ToString;
 
 @Entity
@@ -15,6 +12,7 @@ public class Item {
     public String title;
     public Integer price;
     public String userId;
+    public String filename; // 파일 이름이 길어서 mysql에서 varchar(255)를 text로 수동 형변환함
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -30,6 +28,9 @@ public class Item {
     public void setPrice(Integer price) {
         this.price = price;
 
+    }
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
     public String getItems() {
         String temp = title + ", " + price;

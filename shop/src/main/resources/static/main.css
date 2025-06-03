@@ -48,3 +48,13 @@ input {
     display : block;
     margin : auto;
 }
+
+.page {
+    margin: 10px;
+    border: 1px solid black;
+    padding: 3px 10px;
+    text-decoration: none;
+    background: skyblue;
+    font-size: 20px;
+    color: white;
+}

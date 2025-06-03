@@ -21,6 +21,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        csrf 기능 사용시 주석해제
+//        http.csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository())
+//                .ignoringRequestMatchers("/login")
+//        )
         http.csrf((csrf) -> csrf.disable());    // csrf 공격 방지 시 삭제
         http.authorizeHttpRequests((authorize) ->
                 authorize.requestMatchers("/**").permitAll()    // 로그인 해제
@@ -37,4 +41,12 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+//        csrf 기능 사용시 주석해제
+//    @Bean
+//    public CsrfTokenRepository csrfTokenRepository() {
+//        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+//        repository.setHeaderName("X-XSRF-TOKEN");
+//        return repository;
+//    }
 }
