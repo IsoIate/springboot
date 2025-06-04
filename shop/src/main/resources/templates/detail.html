@@ -15,5 +15,36 @@
     <h4 th:text="${itemData.title}">금도금 바지</h4>
     <p th:text="${itemData.price}">7억</p>
   </div>
+  <div>
+    <h4> 댓글 </h4>
+    <div th:each="i : ${commentData}">
+      <label th:text="${i.username}"></label>
+      <span> | </span>
+      <span th:text="${i.comment}"></span>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+      <input type="text" name="comment" id="comment"/>
+      <p  sec:authentication property="Principal.username" id="username"> </p>
+      <button type="button" th:attr="onclick=|commentWrite()|"> 작성 </button>
+    <div/>
+  </div>
 </body>
 </html>
+
+<script th:inline="javascript">
+  function commentWrite () {
+    let contentId = [[${itemData.id}]];
+    let comment = document.getElementById('comment').value;
+
+    fetch("/commentWrite", {
+      method : "POST",
+      headers : {
+        "Content-Type": "application/json",
+      },
+      body : JSON.stringify({contentId : contentId, comment : comment})
+    })
+            .then(res => res.text())
+            .then(() => {
+            })
+  }
+</script>

@@ -19,8 +19,6 @@ public class ItemService {
         String userId = data.get("userId") != null ? data.get("userId") : "guest";
         String imageURL = data.get("imageURL");
 
-        System.out.println(data);
-
         if(title.length() <= 20 || price >= 0) {
             item.setTitle(title);
             item.setPrice(price);

@@ -5,6 +5,7 @@ import lombok.ToString;
 
 @Entity
 @ToString
+@Table(indexes = @Index(columnList = "title", name = "titleIndex"))
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,6 +13,7 @@ public class Item {
     public String title;
     public Integer price;
     public String userId;
+    @Column(columnDefinition = "TEXT")
     public String filename; // 파일 이름이 길어서 mysql에서 varchar(255)를 text로 수동 형변환함
 
     public void setUserId(String userId) {

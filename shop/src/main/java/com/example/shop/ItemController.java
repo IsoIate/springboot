@@ -1,5 +1,8 @@
 package com.example.shop;
 
+import com.example.shop.comment.Comment;
+import com.example.shop.comment.CommentRepository;
+import com.example.shop.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,19 +21,35 @@ import java.util.Optional;
 public class ItemController {
 
     private final ItemRepository itemRepository;
+    private final CommentRepository commentRepository;
     private final ItemService itemService;
     private final S3Service s3Service;
 
+
     @GetMapping("/list")
     String list(Model model) {
-        List<Item> result = itemRepository.findAll();
+        Page<Item> result = itemRepository.findPageBy(PageRequest.of(0,5));
+        int totalPage = result.getTotalPages();
         model.addAttribute("items", result);
+        model.addAttribute("totalPage", totalPage);
 
         return "list.html";
     }
+
     @GetMapping("/list/page/{page}")
     String getListPage (Model model, @PathVariable Integer page) {
         Page<Item> result = itemRepository.findPageBy(PageRequest.of(page - 1,5));
+        int totalPage = result.getTotalPages();
+        model.addAttribute("items", result);
+        model.addAttribute("totalPage", totalPage);
+
+        return "list.html";
+    }
+
+    @GetMapping("/searchItem")
+    String postSearchItem(Model model, @RequestParam String searchText) {
+
+        Page<Item> result = itemRepository.searchQuery(searchText, PageRequest.of(0, 5));
         int totalPage = result.getTotalPages();
         model.addAttribute("items", result);
         model.addAttribute("totalPage", totalPage);
@@ -83,8 +102,11 @@ public class ItemController {
     String detail(@PathVariable Integer id, Model model) {
 
         Optional<Item> result = itemRepository.findById(id);
+        List<Comment> res = commentRepository.findAllByContentId(Long.valueOf(id));
+
         if(result.isPresent()) {
             model.addAttribute("itemData", result.get());
+            model.addAttribute("commentData", res);
             return "detail.html";
         }
         else {
