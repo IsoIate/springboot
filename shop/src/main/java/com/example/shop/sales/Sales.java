@@ -26,5 +26,6 @@ public class Sales {
     private Integer memberId;
     private String displayName;
 
+
     @CreationTimestamp LocalDateTime created;
 }
