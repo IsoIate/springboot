@@ -31,10 +31,11 @@ public class MyUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authList = new ArrayList<>();
         authList.add(new SimpleGrantedAuthority("일반유저"));
 
-        CustomUser a = new CustomUser(user.getUsername(), user.getPassword(), authList);
-        a.displayName = user.getDisplayName();
+        CustomUser customUser = new CustomUser(user.getUsername(), user.getPassword(), authList);
+        customUser.userId = user.getId();
+        customUser.displayName = user.getDisplayName();
 
-        return a;
+        return customUser;
 //        return new User(user.getUsername(), user.getPassword(), authList);
     }
 

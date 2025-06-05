@@ -1,9 +1,7 @@
 package com.example.shop.sales;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.shop.Member;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,12 +18,14 @@ public class Sales {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String itemName;
-    private Integer price;
-    private Integer count;
+    private Integer itemId;
+//    @ManyToOne
+//    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    private Member member;
     private Integer memberId;
-    private String displayName;
+    private Integer count;
+    private Integer totalPrice;
 
-
-    @CreationTimestamp LocalDateTime created;
+    @CreationTimestamp
+    LocalDateTime created;
 }
