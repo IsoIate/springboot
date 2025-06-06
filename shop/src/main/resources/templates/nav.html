@@ -5,15 +5,19 @@
     <title>Title</title>
 </head>
 <body>
-<div class="nav" th:fragment="navbar">
-    <a class="logo">SpringMall</a>
-    <a href="/list">List</a>
-    <a href="/write">Write</a>
-    <a sec:authorize="isAnonymous()" href="/login">Login</a>
-    <a sec:authorize="isAnonymous()" href="/register">Register</a>
-    <h4 sec:authorize="isAuthenticated()" sec:authentication="principal.username" style="display: inline"> </h4>
-    <a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
-    <a sec:authorize="isAuthenticated()" href="/my-page">myPage</a>
-</div>
+    <div class="nav" th:fragment="navbar">
+        <a class="logo">SpringMall</a>
+        <a href="/list">List</a>
+        <a href="/write">Write</a>
+        <a sec:authorize="isAnonymous()" href="/login">Login</a>
+        <a sec:authorize="isAnonymous()" href="/register">Register</a>
+        <a sec:authorize="isAuthenticated()" href="/my-page">myPage</a>
+        <h4 sec:authorize="isAuthenticated()" sec:authentication="principal.username" style="display: inline"></h4>
+        <a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
+    </div>
+    <div class="background" th:fragment="background">
+        <img src="/banner.png" style="width: 100%"/>
+    </div>
+    </div>
 </body>
 </html>

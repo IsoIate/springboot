@@ -19,7 +19,9 @@
     text-decoration : none;
     font-weight : 400;
     letter-spacing : -0.5px;
+    color: black;
 }
+
 .nav .logo {
     font-weight : 800;
 }
@@ -62,4 +64,75 @@ input {
 .buyItemDiv {
     display: flex;
     justify-content: center;
+}
+
+.linkTag {
+    text-decoration: none;
+    color: white;
+}
+
+.searchForm {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.searchForm span {
+    margin: auto 0;
+}
+
+.searchForm button {
+    margin: 0;
+}
+
+.commentDiv {
+    width: 100%;
+    display: flow-root;
+}
+
+.commentDiv p {
+    float: left;
+    text-align: center;
+    margin: 0 0 10px 0;
+}
+
+.commentInputDiv {
+    display: flex;
+}
+
+.commentInputDiv input {
+    width: 85%;
+    height: 50px;
+}
+
+.commentInputDiv button {
+    flex-grow: 1;
+    margin: 5px 0 0 10px;
+    font-size: 16px;
+}
+
+.writeFormDiv {
+    display: flow-root;
+}
+
+.writeFormDiv button {
+    width: 15%;
+    height: 50px;
+    float: right;
+    margin-right: 30px;
+}
+
+.writeDiv {
+    display: flex;
+    align-items: center;
+}
+
+.writeDiv h4 {
+    margin-left: 30px;
+    width: 15%;
+}
+
+.writeDiv input, .writeDiv img {
+    margin: 10px 30px;
+    flex-grow: 1;
 }

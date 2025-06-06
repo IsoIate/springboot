@@ -5,8 +5,9 @@
   <title>Title</title>
 </head>
 <body>
-<form class="nav" th:fragment="searchBar" method="GET" action="/searchItem">
-  <input name="searchText" />
+<form class="searchForm" th:fragment="searchBar" method="GET" action="/searchItem">
+  <span>검색</span>
+  <input name="searchText" style="margin: 0 10px;"/>
   <button type="submit"> 검색 </button>
 </form>
 </body>
