@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,7 +26,12 @@ public class ItemController {
     private final ItemService itemService;
     private final S3Service s3Service;
 
+    @GetMapping("/")
+    String hello() {
+        return "index.html";
+    }
 
+    // 상품 리스트 페이지
     @GetMapping("/list")
     String list(Model model) {
         Page<Item> result = itemRepository.findPageBy(PageRequest.of(0,5));
@@ -36,8 +42,10 @@ public class ItemController {
         return "list.html";
     }
 
+    // 상품 리스트 페이지네이션
     @GetMapping("/list/page/{page}")
-    String getListPage (Model model, @PathVariable Integer page) {
+    String getListPage (Model model, @RequestParam Map<String, String> data, @PathVariable Integer page) {
+        System.out.println(data);
         Page<Item> result = itemRepository.findPageBy(PageRequest.of(page - 1,5));
         int totalPage = result.getTotalPages();
         model.addAttribute("items", result);
@@ -46,22 +54,37 @@ public class ItemController {
         return "list.html";
     }
 
+    // 상품 검색 API
     @GetMapping("/searchItem")
-    String postSearchItem(Model model, @RequestParam String searchText) {
+    String postSearchItem(Model model, @RequestParam Map<String, String> data) {
 
-        Page<Item> result = itemRepository.searchQuery(searchText, PageRequest.of(0, 5));
+        Page<Item> result = null;
+
+        if(data.get("searchValue").equals("title")) {
+            result = itemRepository.searchTextQuery(data.get("searchText"), PageRequest.of(0, 5));
+        }
+        else {
+            result = itemRepository.searchPriceQuery(data.get("searchPriceMin"), data.get("searchPriceMax"), PageRequest.of(0, 5));
+        }
+
         int totalPage = result.getTotalPages();
         model.addAttribute("items", result);
         model.addAttribute("totalPage", totalPage);
+        model.addAttribute("searchValue", data.get("searchValue"));
+        model.addAttribute("searchText", data.get("searchText"));
+        model.addAttribute("min", data.get("searchPriceMin"));
+        model.addAttribute("max", data.get("searchPriceMax"));
 
         return "list.html";
     }
 
+    // 상품 등록 페이지
     @GetMapping("/write")
     String write() {
         return "write.html";
     }
 
+    // 상품 이미지 추가 시 S3 클라우드에 업로드 및 URL 받아오는 API
     @GetMapping("/presigned-url")
     @ResponseBody
     String getURL (@RequestParam String filename) {
@@ -70,13 +93,9 @@ public class ItemController {
         return result;
     }
 
+    // 상품 추가 API
     @PostMapping("/add")
-//    String add(@ModelAttribute Item item) {
     String add(@ModelAttribute Item item, @RequestParam Map<String, String> data, Authentication auth) {
-//        Item itemData = new Item();
-//        itemData.setTitle(data.get("title"));
-//        itemData.setPrice(data.get("price"));
-
         try  {
             if(!auth.equals(null))
                 data.put("userId", auth.getName());
@@ -96,9 +115,10 @@ public class ItemController {
         return "redirect:/list";
     }
 
-    /*URL 파라미터*/
+    // 상세정보 페이지
+    // URL 파라미터 사용 시 {example} 형태로 사용
+    // 파라미터 값 가져오는 어노테이션 @PathVariable
     @GetMapping("/detail/{id}")
-    // 파라미터 값 가져오는 어노테이션
     String detail(@PathVariable Integer id, Model model) {
 
         Optional<Item> result = itemRepository.findById(id);
@@ -114,6 +134,7 @@ public class ItemController {
         }
     }
 
+    // 수정 페이지 API
     @GetMapping("/modify/{id}")
     String update(@PathVariable Integer id, Model model) {
 
@@ -127,6 +148,7 @@ public class ItemController {
         }
     }
 
+    // 상품 정보 수정 API
     @PostMapping("/update")
     String update(@ModelAttribute Item item, @RequestParam Map<String, String> data) {
 
@@ -139,10 +161,12 @@ public class ItemController {
         return "redirect:/list";
     }
 
+    // 상품 삭제 API
     @PostMapping("/delete")
-    String delete(@RequestBody Map<String, Integer> data) {
+    @ResponseBody
+    boolean delete(@RequestBody Map<String, Integer> data) {
         itemService.deleteItem(data.get("id"));
 
-        return "redirect:/list";
+        return true;
     }
 }

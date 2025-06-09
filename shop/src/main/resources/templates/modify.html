@@ -1,17 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link href="/main.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/main.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{ nav.html::navbar }"></div>
-<form action="/update" method="POST">
-  <input type="hidden" name="id" th:value="${itemData.id}">
-  <input type="text" name="title" th:value="${itemData.title}">
-  <input type="number" name="price" th:value="${itemData.price}">
-  <button type="submit"> 전송 </button>
-</form>
+<div>
+    <div th:replace="~{ nav.html::navbar }"></div>
+    <form action="/update" method="POST" onsubmit="return validForm();">
+        <div class="writeFormDiv">
+            <input type="hidden" name="id" th:value="${itemData.id}">
+            <div class="writeDiv">
+                <h4> 글 제목 </h4>
+                <input type="text" id="title" name="title" th:value="${itemData.title}">
+            </div>
+            <div class="writeDiv">
+                <h4> 가격 </h4>
+                <input type="number" id="price" name="price" th:value="${itemData.price}">
+            </div>
+            <input type="hidden" name="imageURL" id="imageURL">
+            <div class="writeDiv">
+                <h4> 썸네일 </h4>
+                <input type="file" onchange="getURL(this)"/>
+            </div>
+            <div class="writeDiv">
+                <h4> 썸네일 미리보기 </h4>
+                <img style="width: 60%" th:src="@{${itemData.filename}}"/>
+            </div>
+            <button type="button" onclick="formSubmit();"> 전송</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // form 전송 전 validation
+    function formSubmit() {
+        let form = document.querySelector('form');
+
+        if(validForm()) {
+            form.submit();
+        }
+    }
+
+    function validForm() {
+        let title = document.getElementById("title").value;
+        let price = document.getElementById("price").value;
+        let blank = /^\s+|\s+$/g;
+
+        if(!confirm("상품을 수정하시겠습니까?")) return false;
+
+        if(title.replace(blank, '') == "" || price.replace(blank, '') == "") {
+            alert("제목 또는 가격을 확인 해 주십시오.")
+            return false;
+        }
+
+        return true;
+    }
+
+    // AWS S3에 이미지 파일 저장하는 코드
+    async function getURL(e) {
+        let name = encodeURIComponent(e.files[0].name)
+        let url = await fetch('/presigned-url?filename=' + name);
+        url = await url.text();
+
+        let res = await fetch(url, {
+            method: "PUT",
+            body: e.files[0]
+        })
+
+        if (res.ok) {
+            document.querySelector('img').src = res.url.split("?")[0];
+            document.getElementById('imageURL').value = (res.url.split("?")[0]);
+        }
+    }
+</script>
+
 </body>
 </html>

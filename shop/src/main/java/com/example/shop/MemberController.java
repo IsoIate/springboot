@@ -17,6 +17,7 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
 
+    // 회원가입
     @GetMapping("/register")
     public String register(Authentication auth) {
 
@@ -28,7 +29,6 @@ public class MemberController {
 
     @GetMapping("/login")
     public String login() {
-
         return "login.html";
     }
 
@@ -41,7 +41,6 @@ public class MemberController {
 //        System.out.println(auth.getName());
 //        System.out.println(auth.isAuthenticated()); // 로그인 여부
         CustomUser user = (CustomUser) auth.getPrincipal();
-        System.out.println(user.displayName);
         return "mypage.html";
     }
 

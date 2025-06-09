@@ -52,6 +52,7 @@
 
 <script th:inline="javascript">
 
+    // 상품 구매
     function buyItem() {
         let itemId = [[${itemData.id}]];
         let count = document.getElementById("count").value;
@@ -72,6 +73,7 @@
             })
     }
 
+    // 후기 작성
     function commentWrite() {
         let contentId = [[${itemData.id}]];
         let comment = document.getElementById('comment').value;

@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-<form class="searchForm" th:fragment="searchBar" method="GET" action="/searchItem">
-  <span>검색</span>
-  <input name="searchText" style="margin: 0 10px;"/>
-  <button type="submit"> 검색 </button>
-</form>
+<div>
+    <form class="searchForm" th:fragment="searchBar" method="GET" action="/searchItem" onsubmit="return validForm();">
+        <span>검색</span>
+        <select name="searchValue" id="searchValue" onchange="selectValue()">
+            <option value="title" selected> 상품명</option>
+            <option value="price"> 가격</option>
+        </select>
+        <input class="searchText" name="searchText" type="text" placeholder="제품명"/>
+        <input class="searchPrice" name="searchPriceMin" type="number" placeholder="최소가격"/>
+        <input class="searchPrice" name="searchPriceMax" type="number" placeholder="최대가격"/>
+        <button type="button" onclick="formSubmit();"> 검색</button>
+    </form>
+</div>
 </body>
 </html>

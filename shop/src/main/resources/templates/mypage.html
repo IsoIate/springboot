@@ -14,11 +14,11 @@
     </div>
 
     <div sec:authorize="isAuthenticated()">
-      <h4>로그인 된 유저만 볼수있음 </h4>
+      <h4> 로그인 된 유저만 볼수있음 </h4>
     </div>
 
     <div sec:authorize="isAnonymous()">
-      <h4>로그아웃 된 유저만 볼수있음 </h4>
+      <h4> 로그아웃 된 유저만 볼수있음 </h4>
     </div>
 
     <div sec:authentication="principal.username">

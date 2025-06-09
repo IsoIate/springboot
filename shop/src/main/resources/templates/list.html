@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="/main.css" rel="stylesheet">
+    <script layout:fragment="script" type="text/javascript" src="/lib/jquery-3.7.1.js"></script>
 </head>
 <body>
     <div>
@@ -15,7 +16,7 @@
             <img th:if="${i.filename} != null" th:src="@{${i.filename}}"/>
             <img th:if="${i.filename} == null" th:src="@{${'https://placehold.co/300'}}" />
             <div>
-                <h4 >
+                <h4>
                     <a th:text="'상품명 : ' + ${i.title}" th:href="@{/detail/{id} (id=${i.id})}" class="linkTag" style="color: black"></a>
                 </h4>
                 <p th:text="'가격 : ' + ${i.price}">7억</p>
@@ -25,24 +26,86 @@
                 <button th:attr="onclick=|deleteItem('${i.id}')|">삭제</button>
             </div>
         </div>
+        <!-- 페이지네이션 -->
         <div>
-            <p th:text="${searchText}"></p>
             <a class="page" th:each="i : ${#numbers.sequence(1, totalPage)}" th:text="${i}" th:href="@{/list/page/{id} (id=${i})}"></a>
         </div>
     </div>
     <script>
-        function deleteItem(itemId) {
-            fetch("/delete", {
-                method : "POST",
-                headers : {
-                    "Content-Type": "application/json",
-                },
-                body : JSON.stringify({id : itemId})
-            })
-                .then(res => res.text())
-                .then((a) => {
+        // 리스트 접근 시 검색결과에 따라 select 값 변경 및 검색어 저장
+        $(function () {
+            let url = new URLSearchParams(location.search);
+            let searchValue = url.get("searchValue");
+            let text = url.get("searchText");
+            let min = url.get("searchPriceMin");
+            let max = url.get("searchPriceMax");
 
+            if(searchValue == "title" || searchValue == null) {
+                $("select[name=searchValue] option:eq(0)").attr("selected", "selected");
+                $(".searchPrice").css("display", "none");
+                $("input[name=searchText]").val(text);
+            }
+            else if(searchValue == "price") {
+                $("select[name=searchValue] option:eq(1)").attr("selected", "selected");
+                $(".searchText").css("display", "none");
+                $("input[name=searchPriceMin]").val(min);
+                $("input[name=searchPriceMax]").val(max);
+            }
+        })
+
+        function selectValue() {
+            let selectValue = $("select[name=searchValue] option:selected").val();
+            if (selectValue == "title") {
+                $(".searchText").css("display", "block");
+                $(".searchPrice").css("display", "none");
+            } else {
+                $(".searchPrice").css("display", "block");
+                $(".searchText").css("display", "none");
+            }
+        }
+
+        // form 전송 전 validation
+        function formSubmit() {
+            let form = $(".searchForm");
+
+            if(validForm()) {
+                form.submit();
+            }
+        }
+
+        function validForm() {
+            let min = $("input[name=searchPriceMin]").val() || 0;
+            let max = $("input[name=searchPriceMax]").val() || 1000000000;
+
+            $("input[name=searchPriceMin]").val(min);
+            $("input[name=searchPriceMax]").val(max);
+
+            return true;
+        }
+
+        // 상품 삭제
+        function deleteItem(itemId) {
+            if(confirm("상품을 삭제하시겠습니까?")) {
+                fetch("/delete", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({id: itemId})
                 })
+                    .then(res => res.text())
+                    .then((code) => {
+                        let text = "";
+
+                        if(code)
+                            text = "정상적으로 삭제되었습니다.";
+                        else
+                            text = "삭제 중 문제가 발생했습니다.";
+
+                        alert(text);
+                        location.reload();
+                    })
+            }
         }
     </script>
 </body>

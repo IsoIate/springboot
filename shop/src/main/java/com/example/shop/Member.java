@@ -44,6 +44,4 @@ public class Member {
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
-
-
 }
